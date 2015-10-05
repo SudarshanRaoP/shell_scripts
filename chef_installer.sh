@@ -1,5 +1,6 @@
 #!/bin/bash
 
+##Header
 clear
 echo -e "\t\t[+]Chef installer[+]"
 echo
@@ -9,7 +10,7 @@ echo "#Arch: x86_64 or amd64 (64 bit)"
 echo "======================================================"
 echo
 
-
+##Gethering system info
 get_system_info(){
 if test -f "/etc/lsb-release" && grep -q DISTRIB_ID /etc/lsb-release; then
   platform=`grep DISTRIB_ID /etc/lsb-release | cut -d "=" -f 2 | tr '[A-Z]' '[a-z]'`
@@ -24,6 +25,7 @@ else
 fi
 }
 
+#Getting system architecture
 get_system_arch(){
   machine=`uname -m`
   if [[ $machine == "x86_64" ]]; then
@@ -41,6 +43,7 @@ get_system_arch(){
   fi
 }
 
+#Validating system informations for server
 validate_system_info(){
   case $platform in
   "ubuntu")
@@ -58,6 +61,9 @@ validate_system_info(){
    return 1
   esac
 }
+
+
+#Validating system information for Chef dk
 validate_info_chefdk(){
   case ${platform} in
   "ubuntu")
@@ -72,6 +78,8 @@ validate_info_chefdk(){
   ;;
   esac
 }
+
+##Trying curl to validate download url
 do_curl() {
   echo "trying curl..."
   curl -sL -D ./chef_installer.stderr "$1" > "$2"
@@ -92,6 +100,8 @@ do_curl() {
   return 0
 }
 
+
+##trying python to validate download url
 do_python() {
   echo "trying python..."
   python -c "import sys,urllib2 ; sys.stdout.write(urllib2.urlopen(sys.argv[1]).read())" "$1" > "$2" 2>./chef_installer.stderr
@@ -110,6 +120,8 @@ do_python() {
   fi
   return 0
 }
+
+##Downloading package
 download_file(){
  if [ $? -eq 0 ];then
  wget --no-check-certificate $1 -O $2 2>&1 >./chef_installer.stderr
@@ -117,6 +129,8 @@ download_file(){
    exit 1
  fi
 }
+
+##Validating url using curl and python
 validate_url(){
   if exists curl;then
     do_curl $1 $2
@@ -130,6 +144,8 @@ validate_url(){
     return 1
   fi
 }
+
+##Installing chef-server
 install_server(){
 echo -n "Enter Chef server version to install.[Default: 12.2.0] : " && read CHEF_SERVER_VERSION
 if $CHEF_SERVER_VERSION == "" ;then
@@ -162,10 +178,15 @@ else
 fi
 }
 
+
+
+##Configuring Chef-server
 server_reconfigure(){
   sudo chef-server-ctl reconfigure
 }
 
+
+##Taking inputs for user creation
 user_input(){
 echo "Chef administration configuration:"
 echo -n "Admin username: " && read USERNAME
@@ -176,6 +197,8 @@ echo -n "Password: " && read PASSWORD
 echo -n "User .pem directory: " && read USER_PEM_DIR
 }
 
+
+##Taking inputs for organization creation
 org_input(){
 echo "Organization Admin Configuration"
 echo -n "Organization short name: " && read ORG_SHORT
@@ -185,6 +208,8 @@ echo -n "Organization validator.pem directory: " && read ORG_PEM_DIR
 
 }
 
+
+##Validating User inputs
 validate_user(){
   for users in `sudo chef-server-ctl user-list`
     do
@@ -197,6 +222,8 @@ validate_user(){
   done
 }
 
+
+##Validating Org input
 validate_org(){
  for orgs in `sudo chef-server-ctl org-list`
    do
@@ -209,6 +236,8 @@ validate_org(){
 done
 }
 
+
+##Create User
 create_user(){
   validate_user
   if [ $? -ne 4 ] ; then
@@ -217,6 +246,8 @@ create_user(){
   fi
 }
 
+
+##Create organization
 create_org(){
   validate_org
   if [ $? -ne 4 ]; then
@@ -225,12 +256,15 @@ create_org(){
   fi
 }
 
+##Installing Chef management console
 install_management_console(){
   sudo chef-server-ctl install opscode-manage
   sudo opscode-manage-ctl reconfigure
   sudo chef-server-ctl reconfigure
 }
 
+
+##Usage
 print_usage(){
 echo "Usage: $0"
 echo -e "\tOptions:"
@@ -243,6 +277,8 @@ echo -e "\t\t-x [username] : Username."
 echo -e "\t\t-P [Password] : Password."
 }
 
+
+##Installing Chef dk
 install_chef_dk(){
 echo -n "Enter Chefdk version to install. [Default : 0.8.1] : " && read CHEF_DK_VERSION
 if [[ ${CHEF_DK_VERSION} == "" ]];then
@@ -273,6 +309,8 @@ else
 fi
 }
 
+
+##Bootstrapping nodes from a file
 bootstrap_nodes(){
    if [ -n "$1" ] && [ -n "$2" ] && [ -n $3 ]; then
    for node in `cat $3`
@@ -287,7 +325,7 @@ bootstrap_nodes(){
    fi
 }
 
-
+##Command line argument parsing
 while getopts suochb:x:P:f opts; do
   case $opts in
     s)
