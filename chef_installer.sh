@@ -272,9 +272,10 @@ echo -e "\t\t-s : Install server."
 echo -e "\t\t-u : Create user account."
 echo -e "\t\t-o : Create organization."
 echo -e "\t\t-c : Install Chef-dk."
-echo -e "\t\t-b [file] : Bootstrap nodes in file."
+echo -e "\t\t-b : Bootstrap nodes in file."
 echo -e "\t\t-x [username] : Username."
 echo -e "\t\t-P [Password] : Password."
+echo -e "\t\t-f [file] : File containing nodes list."
 }
 
 
