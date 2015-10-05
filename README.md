@@ -3,6 +3,7 @@
 #chef_installer.sh
 
 Usage : chef_installer.sh [options]
+   
 	Options: 
 		-s		:	Install Chef server
 		-u		:	Create user.
