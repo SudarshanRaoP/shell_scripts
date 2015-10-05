@@ -288,7 +288,7 @@ bootstrap_nodes(){
 }
 
 
-while getopts suochb opts; do
+while getopts suochb:x:P:f opts; do
   case $opts in
     s)
     install_server
