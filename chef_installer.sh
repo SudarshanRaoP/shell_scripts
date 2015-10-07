@@ -104,7 +104,7 @@ do_curl() {
 ##trying python to validate download url
 do_python() {
   echo "trying python..."
-  python -c "import sys,urllib2 ; sys.stdout.write(urllib2.urlopen(sys.argv[1]).read())" "$1" > "$2" 2>./chef_installer.stderr
+  python -c "import sys,urllib2 ; sys.stdout.write(urllib2.urlopen(sys.argv[1]).read())" "$1" > "$2" > ./chef_installer.stderr 2>&1
   rc=$?
   # check for 404
   grep "HTTP Error 404" ./chef_installer.stderr 2>&1 >/dev/null
@@ -132,11 +132,11 @@ download_file(){
 
 ##Validating url using curl and python
 validate_url(){
-  if exists curl;then
+  if test -f "/usr/bin/curl";then
     do_curl $1 $2
   fi
   rc=$?
-  if exists python;then
+  if test -f "/usr/bin/python" ;then
     do_python $1 $2 && return 0
   fi
   if [ $rc -ne 0 ] && [ $? -ne 0 ]; then
@@ -148,7 +148,7 @@ validate_url(){
 ##Installing chef-server
 install_server(){
 echo -n "Enter Chef server version to install.[Default: 12.2.0] : " && read CHEF_SERVER_VERSION
-if $CHEF_SERVER_VERSION == "" ;then
+if [[ $CHEF_SERVER_VERSION == "" ]] ;then
   CHEF_SERVER_VERSION=12.2.0
 fi
 get_system_info
