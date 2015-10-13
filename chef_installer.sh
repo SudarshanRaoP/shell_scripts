@@ -131,7 +131,6 @@ download_file(){
 }
 
 ##Validating url using curl and python
-<<<<<<< HEAD
 #validate_url(){
 #  if exists curl;then
 #    do_curl $1 $2
