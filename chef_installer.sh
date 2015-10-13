@@ -293,14 +293,14 @@ case $platform in
   "ubuntu")
   CHEF_DK_URL=https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/${platform_version}/`uname -m`/chefdk_${CHEF_DK_VERSION}-1_${system_arch}.deb
   CHEF_DK_FILE=chefdk_${CHEF_DK_VERSION}-1_${system_arch}.deb
-  validate_url ${CHEF_DK_URL} ${CHEF_DK_FILE}
+#  validate_url ${CHEF_DK_URL} ${CHEF_DK_FILE}
   download_file ${CHEF_DK_URL} ${CHEF_DK_FILE}
   dpkg -i $CHEF_DK_FILE
   ;;
   "redhat"|"centos")
-  CHEF_DK_URL=https://opscode-omnibus-packages.s3.amazonaws.com/el/${platform_version}/${system_arch}/chefdk-${CHEF_DK_VERSION}-1.el${platform_vesion}.${system_arch}.rpm
+  CHEF_DK_URL=https://opscode-omnibus-packages.s3.amazonaws.com/el/${platform_version}/${system_arch}/chefdk-${CHEF_DK_VERSION}-1.el${platform_version}.${system_arch}.rpm
   CHEF_DK_FILE=chefdk-${CHEF_DK_VERSION}-1.el${platform_vesion}.${system_arch}.rpm
-  validate_url ${CHEF_DK_URL} ${CHEF_DK_FILE}
+#  validate_url ${CHEF_DK_URL} ${CHEF_DK_FILE}
   download_file ${CHEF_DK_URL} ${CHEF_DK_FILE}
   rpm -i $CHEF_DK_FILE
  ;;
