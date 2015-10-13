@@ -102,10 +102,17 @@ validate_info_chefdk(){
 
 
 ##trying python to validate download url
+<<<<<<< HEAD
 #do_python() {
 #  echo "trying python..."
 #  python -c "import sys,urllib2 ; sys.stdout.write(urllib2.urlopen(sys.argv[1]).read())" "$1" > "$2" 2>./chef_installer.stderr
 #  rc=$?
+=======
+do_python() {
+  echo "trying python..."
+  python -c "import sys,urllib2 ; sys.stdout.write(urllib2.urlopen(sys.argv[1]).read())" "$1" > "$2" > ./chef_installer.stderr 2>&1
+  rc=$?
+>>>>>>> 7c6e08137a7e02f993c5bca0f68cbff37364ff37
   # check for 404
 #  grep "HTTP Error 404" ./chef_installer.stderr 2>&1 >/dev/null
 #  if test $? -eq 0; then
@@ -131,6 +138,7 @@ download_file(){
 }
 
 ##Validating url using curl and python
+<<<<<<< HEAD
 #validate_url(){
 #  if exists curl;then
 #    do_curl $1 $2
@@ -144,11 +152,26 @@ download_file(){
 #    return 1
 #  fi
 #}
+=======
+validate_url(){
+  if test -f "/usr/bin/curl";then
+    do_curl $1 $2
+  fi
+  rc=$?
+  if test -f "/usr/bin/python" ;then
+    do_python $1 $2 && return 0
+  fi
+  if [ $rc -ne 0 ] && [ $? -ne 0 ]; then
+  echo "Unable to download file"
+    return 1
+  fi
+}
+>>>>>>> 7c6e08137a7e02f993c5bca0f68cbff37364ff37
 
 ##Installing chef-server
 install_server(){
 echo -n "Enter Chef server version to install.[Default: 12.2.0] : " && read CHEF_SERVER_VERSION
-if $CHEF_SERVER_VERSION == "" ;then
+if [[ $CHEF_SERVER_VERSION == "" ]] ;then
   CHEF_SERVER_VERSION=12.2.0
 fi
 get_system_info
