@@ -53,7 +53,7 @@ validate_system_info(){
   ;;
   "redhat"|"centos")
     for version in 7 5 6
-      do if $version == $platform_version; then return 0; fi
+      do if [[ $version == $platform_version ]]; then return 0; fi
     done
   ;;
   *)
@@ -73,53 +73,53 @@ validate_info_chefdk(){
   ;;
   "redhat"|"centos")
   for version in 7 6
-    do if "$version" == $platform_version; then return 0; fi
+    do if [[ "$version" == $platform_version ]]; then return 0; fi
   done
   ;;
   esac
 }
 
 ##Trying curl to validate download url
-do_curl() {
-  echo "trying curl..."
-  curl -sL -D ./chef_installer.stderr "$1" > "$2"
-  rc=$?
+#do_curl() {
+#  echo "trying curl..."
+#  curl -sL -D ./chef_installer.stderr "$1" > "$2"
+#  rc=$?
   # check for 404
-  grep "404 Not Found" ./chef_installer.stderr 2>&1 >/dev/null
-  if test $? -eq 0; then
-    echo "ERROR 404"
-    http_404_error
-  fi
+#  grep "404 Not Found" ./chef_installer.stderr 2>&1 >/dev/null
+#  if test $? -eq 0; then
+#    echo "ERROR 404"
+#    http_404_error
+#  fi
 
   # check for bad return status or empty output
-  if test $rc -ne 0 || test ! -s "$2"; then
-    capture_tmp_stderr "curl"
-    return 1
-  fi
+#  if test $rc -ne 0 || test ! -s "$2"; then
+#    capture_tmp_stderr "curl"
+#    return 1
+#  fi
 
-  return 0
-}
+#  return 0
+#}
 
 
 ##trying python to validate download url
-do_python() {
-  echo "trying python..."
-  python -c "import sys,urllib2 ; sys.stdout.write(urllib2.urlopen(sys.argv[1]).read())" "$1" > "$2" 2>./chef_installer.stderr
-  rc=$?
+#do_python() {
+#  echo "trying python..."
+#  python -c "import sys,urllib2 ; sys.stdout.write(urllib2.urlopen(sys.argv[1]).read())" "$1" > "$2" 2>./chef_installer.stderr
+#  rc=$?
   # check for 404
-  grep "HTTP Error 404" ./chef_installer.stderr 2>&1 >/dev/null
-  if test $? -eq 0; then
-    echo "ERROR 404"
-    http_404_error
-  fi
+#  grep "HTTP Error 404" ./chef_installer.stderr 2>&1 >/dev/null
+#  if test $? -eq 0; then
+#    echo "ERROR 404"
+#    http_404_error
+#  fi
 
   # check for bad return status or empty output
-  if test $rc -ne 0 || test ! -s "$2"; then
-    capture_tmp_stderr "python"
-    return 1
-  fi
-  return 0
-}
+#  if test $rc -ne 0 || test ! -s "$2"; then
+#    capture_tmp_stderr "python"
+#    return 1
+#  fi
+#  return 0
+#}
 
 ##Downloading package
 download_file(){
@@ -131,19 +131,19 @@ download_file(){
 }
 
 ##Validating url using curl and python
-validate_url(){
-  if exists curl;then
-    do_curl $1 $2
-  fi
-  rc=$?
-  if exists python;then
-    do_python $1 $2 && return 0
-  fi
-  if [ $rc -ne 0 ] && [ $? -ne 0 ]; then
-  echo "Unable to download file"
-    return 1
-  fi
-}
+#validate_url(){
+#  if exists curl;then
+#    do_curl $1 $2
+#  fi
+#  rc=$?
+#  if exists python;then
+#    do_python $1 $2 && return 0
+#  fi
+#  if [ $rc -ne 0 ] && [ $? -ne 0 ]; then
+#  echo "Unable to download file"
+#    return 1
+#  fi
+#}
 
 ##Installing chef-server
 install_server(){
@@ -159,7 +159,7 @@ case "${platform}" in
   "ubuntu")     
   chef_download_url=https://web-dl.packagecloud.io/chef/stable/packages/${platform}/${platform_code}/chef-server-core_${CHEF_SERVER_VERSION}-1_${system_arch}.deb
   chef_download_file=chef-server-core_${CHEF_SERVER_VERSION}-1_${system_arch}.deb
-  validate_url ${chef_download_url} ${chef_download_file}
+#  validate_url ${chef_download_url} ${chef_download_file}
   download_file ${chef_download_url} ${chef_download_file}
   sudo dpkg -i ${chef_download_file} 2>&1 >/dev/null
   return 0
@@ -167,7 +167,7 @@ case "${platform}" in
   "redhat"|"centos")
   chef_download_url=https://web-dl.packagecloud.io/chef/stable/packages/el/${platform_version}/chef-server-core-${CHEF_SERVER_VERSION}-1.el${platform_version}.${system_arch}.rpm
   chef_download_file=chef-server-core-${CHEF_SERVER_VERSION}-1.el${platform_version}.${system_arch}.rpm
-    validate_url ${chef_download_url} ${chef_download_file}
+#    validate_url ${chef_download_url} ${chef_download_file}
   download_file ${chef_download_url} ${chef_download_file}
   sudo rpm -i ${chef_download_file}
   return 0
