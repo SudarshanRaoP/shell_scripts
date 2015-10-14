@@ -310,6 +310,9 @@ else
 fi
 }
 
+check_server(){
+  if [[ ! -f '/usr/bin/chef-server-ctl' ]];then echo "Chef server is not installed!!"; exit 1 ; fi
+}
 
 ##Bootstrapping nodes from a file
 bootstrap_nodes(){
@@ -336,10 +339,12 @@ while getopts suochb:x:P:f opts; do
     install_management_console
     ;;
     u)
+    check_server
     user_input
     create_user
     ;;
     o)
+    check_server
     org_input
     create_org
     ;;
