@@ -88,6 +88,9 @@ install_zeppelin(){
 	touch zeppeline-env.sh
 	echo "export JAVA_HOME=$ZEPPELIN_HOME/prerequisites/jdk1.7.0_79" >> zeppeline-env.sh
 	echo "export HADOOP_CONF_DIR=/etc/hadoop/conf" >> zeppeline-env.sh
+	##Warning:
+	### If you see error related to jackson-databind jar.
+	### Remove that from zeppelin-server/lib abd zeppelin-zengine/lib directory
 	print "WARNING: Make sure hadoop-client is installed."
 	print "WARNING: Copy hive-site.xml in $ZEPPELIN_HOME/conf directory."
 }
