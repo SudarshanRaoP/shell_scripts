@@ -36,7 +36,7 @@ install_git(){
 
 install_java(){
 	print "Installing Java ..."
-	if [ `uname -a` -eq "x86_64" ]; then
+	if [ `uname -m` -eq "x86_64" ]; then
 		cd $ZEPPELIN_HOME/prerequisites
 		wget --no-check-certificate \
 	     --no-cookies \
