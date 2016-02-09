@@ -7,7 +7,7 @@ ZEPPELIN_HOME=/home/zeppelin
 ZEPPELIN_DEFAULT_BUILD="-Pspark-1.5 -Dspark.version=1.5.0 -Dhadoop.version=2.6.0 -Phadoop-2.6 -Pyarn -DskipTests"
 
 print(){
-	echo "[+] $#"
+	echo "[+] $*"
 }
 
 create_zeppelin_user(){
@@ -22,6 +22,7 @@ create_zeppelin_user(){
 
 }
 install_git(){
+	print "Installing git ..."
 	mkdir -p $ZEPPELIN_HOME
 	cd $ZEPPELIN_HOME/prerequisites
 	wget $GIT_DOWNLOAD_URL -O git-2.4.8.tar.gz > /dev/null 2&>1
