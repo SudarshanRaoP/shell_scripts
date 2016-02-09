@@ -52,7 +52,7 @@ install_java(){
 	source /home/zeppelin/.bashrc
 }
 install_maven(){
-	print "Installing Maven"
+	print "Installing Maven ..."
 	cd $ZEPPELIN_HOME/prerequisites
 	wget ftp://mirror.reverse.net/pub/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz > /dev/null 2&>1
 	tar xzf apache-maven-3.3.3-bin.tar.gz > /dev/null 2&>1
@@ -64,14 +64,14 @@ install_maven(){
 	}
 install_deps(){
 	print "Installing dependencies ..."
-	yum install -y curl-devel \
+	sudo yum install -y curl-devel \
 		expat-devel \
 		gettext-devel \
 		openssl-devel \
 		zlib-devel \
 		gcc \
 		perl-ExtUtils-MakeMaker > /dev/null 2&>1
-	yum remove -y git > /dev/null 2&>1
+	sudo yum remove -y git > /dev/null 2&>1
 	install_git
 	install_java
 	install_maven
