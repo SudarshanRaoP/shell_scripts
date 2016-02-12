@@ -6,6 +6,7 @@ ZEPPELIN_HOME=/home/zeppelin
 
 ZEPPELIN_DEFAULT_BUILD="-Pspark-1.5 -Dspark.version=1.5.0 -Dhadoop.version=2.6.0 -Phadoop-2.6 -Pyarn -DskipTests"
 
+GIT_DOWNLOAD_URL=https://github.com/git/git/archive/v2.4.8.tar.gz
 print(){
 	echo "[+] $*"
 }
@@ -25,26 +26,26 @@ install_git(){
 	print "Installing git ..."
 	mkdir -p $ZEPPELIN_HOME
 	cd $ZEPPELIN_HOME/prerequisites
-	wget $GIT_DOWNLOAD_URL -O git-2.4.8.tar.gz > /dev/null 2&>1
-	tar xzf git-2.4.8.tar.gz > /dev/null 2&>1
+	wget $GIT_DOWNLOAD_URL -O git-2.4.8.tar.gz
+	tar xzf git-2.4.8.tar.gz
 	cd git-2.4.8
 	make prefix=$ZEPPELIN_HOME/prerequisites/git all > /dev/null 2&>1
 	make prefix=$ZEPPELIN_HOME/prerequisites/git install > /dev/null 2&>1
-	echo "export PATH=$PATH:$ZEPPELIN_HOME/prerequisites/bin" >> /home/zeppelin/.bashrc
+	echo "export PATH=$PATH:$ZEPPELIN_HOME/prerequisites/git/bin" >> /home/zeppelin/.bashrc
 	source /home/zeppelin/.bashrc
 	echo `git --version`
 	}
 
 install_java(){
 	print "Installing Java ..."
-	if [ `uname -m` -eq "x86_64" ]; then
+	if [ `uname -m` == "x86_64" ]; then
 		cd $ZEPPELIN_HOME/prerequisites
 		wget --no-check-certificate \
 	     --no-cookies \
 	     --header 'Cookie: oraclelicense=accept-securebackup-cookie' \
 	     http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jdk-7u79-linux-x64.tar.gz \
-	     -O jdk-7u79-linux-x64.tar.gz > /dev/null 2&>1
-	     tar xvf jdk-7u79-linux-x64.tar.gz > /dev/null 2&>1
+	     -O jdk-7u79-linux-x64.tar.gz
+	     tar xvf jdk-7u79-linux-x64.tar.gz
 	    echo "export JAVA_HOME=$ZEPPELIN_HOME/prerequisites/jdk1.7.0_79" >> /home/zeppelin/.bashrc
 	else
 		print "Error: Arch not x86_64. Exiting ..."
@@ -54,8 +55,8 @@ install_java(){
 install_maven(){
 	print "Installing Maven ..."
 	cd $ZEPPELIN_HOME/prerequisites
-	wget ftp://mirror.reverse.net/pub/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz > /dev/null 2&>1
-	tar xzf apache-maven-3.3.3-bin.tar.gz > /dev/null 2&>1
+	wget ftp://mirror.reverse.net/pub/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz
+	tar xzf apache-maven-3.3.3-bin.tar.gz
 	cd apache-maven-3.3.3
 	export MAVEN_HOME=$ZEPPELIN_HOME/prerequisites/apache-maven-3.3.3
 	echo "export PATH=$PATH:$ZEPPELIN_HOME/prerequisites/apache-maven-3.3.3/bin" >> /home/zeppelin/.bashrc
