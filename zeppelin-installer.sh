@@ -6,7 +6,7 @@ ZEPPELIN_HOME=/home/zeppelin
 
 ZEPPELIN_DEFAULT_BUILD="-Pspark-1.5 -Dspark.version=1.5.0 -Dhadoop.version=2.6.0 -Phadoop-2.6 -Pyarn -DskipTests"
 
-GIT_DOWNLOAD_URL=https://github.com/git/git/archive/v2.4.8.tar.gz
+GIT_DOWNLOAD_URL="https://github.com/git/git/archive/v2.4.8.tar.gz"
 print(){
 	echo "[+] $*"
 }
@@ -73,6 +73,7 @@ install_deps(){
 		gcc \
 		perl-ExtUtils-MakeMaker > /dev/null 2&>1
 	sudo yum remove -y git > /dev/null 2&>1
+	su - zeppelin
 	install_git
 	install_java
 	install_maven
