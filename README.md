@@ -1,5 +1,9 @@
 # shell_scripts
 
+* chef_installer.sh : Installer for Chef Server and Client
+* zeppelin_installer.sh : Installer for Apache Zeppelin
+
+
 #chef_installer.sh
 
 
