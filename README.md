@@ -48,3 +48,11 @@ To configure knife:
 To bootstrap nodes:
 
 	chef_installer.sh -b -x <username> -P <password> -f <file>
+
+
+#zeppelin-installer.sh
+
+```shell
+	chmod +x zeppelin-installer.sh
+	./zeppelin-installer.sh
+```
