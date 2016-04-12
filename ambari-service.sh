@@ -63,47 +63,47 @@ while getopts gdu:p:a:c:s:h:r:x opts;do
 	case $opts in
 		u)
 		if [[ "$OPTARG" != "" ]]; then
-			user=$OPTARG
+		user=$OPTARG
 		else
-			user='admin'
+		user='admin'
 		fi;;
 		p)
 		if [[ "$OPTARG" != "" ]]; then
-			password=$OPTARG
+		password=$OPTARG
 		else
-			password='admin'
+		password='admin'
 		fi;;
 		a)
 		if [[ "$OPTARG" != ""G ]]; then
-			ambari=$OPTARG
+		ambari=$OPTARG
 		else
-			ambari="localhost"
+		ambari="localhost"
 		fi;;
 		c)
 		if [[ "$OPTARG" != "" ]]; then
-			cluster=$OPTARG
+		cluster=$OPTARG
 		else
-			print Error: Cluster name is missing.
-			exit 1
+		print Error: Cluster name is missing.
+		exit 1
 		fi;;
 		s)
 		if [[ "$OPTARG" != "" ]]; then
-			service=$OPTARG
+		service=$OPTARG
 		else
-			print Error: Service name is missing.
-			exit 1
+		print Error: Service name is missing.
+		exit 1
 		fi;;
 		h)
 		if [[ "$OPTARG" != "" ]]; then
-			host=$OPTARG
+		host=$OPTARG
 		else
-			host='localhost'
+		host='localhost'
 		fi;;
 		r)
 		if [[ "$OPTARG" != "" ]]; then
-			role=$OPTARG
+		role=$OPTARG
 		else
-			print Error: Role name is missing.
+		print Error: Role name is missing.
 		fi;;
 		g)
 		print Getting service info
