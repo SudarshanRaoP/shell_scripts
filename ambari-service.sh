@@ -4,6 +4,13 @@ print(){
 	echo "[+] $*"
 }
 
+## To get information about a service.
+#Usage: ./ambari-service.sh -u admin -p admin -a ambari_host -c cluster1 -s kAFKA -g
+## To stop a service. Note: Maintainance mode must be off on that service.
+## Usage: ./ambari-service.sh -u admin -p admin -a ambari_host -c cluster1 -s kAFKA -x
+## To delete a service.
+## Usage: ./ambari-service.sh -u admin -p admin -a ambari_host -c cluster1 -s kAFKA -d
+
 print_usage(){
 	echo -e "Usage: "
 	echo -e "\t\tambari-service.sh [options <args>] <action>"
@@ -13,12 +20,13 @@ print_usage(){
 	echo -e "\t\t\t\t-a <ambari host> : Ambari server hostname."
 	echo -e "\t\t\t\t-c <cluster name> : Cluster name."
 	echo -e "\t\t\t\t-s <service name> : Service name."
-	echo -e "\t\t\t\t-h <host> : Host-ID, typically same as hostname."
-	echo -e "\t\t\t\t-r <role name> : Role or component name.\n"
+	#echo -e "\t\t\t\t-h <host> : Host-ID, typically same as hostname."
+	#echo -e "\t\t\t\t-r <role name> : Role or component name.\n"
 	echo -e "\t\t\tWhere actions are:"
 	echo -e "\t\t\t\t-g : Get service information."
 	echo -e "\t\t\t\t-x : Stop a service."
-	echo -e "\t\t\t\t-d : Delete a service."
+	echo -e "\t\t\t\t-d : Delete a service.\n"
+	echo -e "\t\t\tExample: ./ambari-service.sh -u admin -p admin -a localhost -c cluster1 -s kAFKA -g"
 }
 
 get_service_info(){
