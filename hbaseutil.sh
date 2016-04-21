@@ -31,7 +31,8 @@ check_consistency(){
 if [[ `whoami` != "hbase" ]];then
 print_msg "This operation can only be performed as 'hbase'."
 else
-hbase hbck $*
+print_msg "Checking consistency ..."
+hbase hbck $1
 fi
 }
 enable_replication(){
@@ -49,14 +50,16 @@ EOF
 }
 
 copy_table(){
+	print_msg "Copying table : $1"
 	hbase org.apache.hadoop.hbase.mapreduce.CopyTable --starttime=$STARTTIME --endtime=$ENDTIME --peer.adr=$PEER $ADDOPTS $1
 }
 
 verify_replication(){
+print_msg "Verifying replication: $1"
 HADOOP_CLASSPATH=`${HBASE_HOME}/bin/hbase classpath` hadoop jar $HBASE_HOME/lib/hbase-server.jar verifyrep --starttime=$STARTTIME --stoptime=$ENDTIME $ADDOPTS $ID $1 
 }
 
-while getopts c::e:d:f:C:S:E:F:A: opts;do
+while getopts c::e:d:f:C:S:E:P:A:h:i:V: opts;do
 	case $opts in
 		c)
 		if [[ "$OPTARG" != "" ]];then
@@ -70,14 +73,6 @@ while getopts c::e:d:f:C:S:E:F:A: opts;do
 		;;
 		d)
 		disable_replication $OPTARG
-		;;
-		f)
-		if [[ "$OPTARG" != "" ]];then
-			CFG_FILE=$OPTARG
-		else
-			print_msg "No configuration file provided."
-			exit
-		fi
 		;;
 		S)
 		if [[ "$OPTARG" != "" ]];then
@@ -140,7 +135,6 @@ while getopts c::e:d:f:C:S:E:F:A: opts;do
 			print_msg "No table provided."
 			exit
 		fi
-		;;
 		;;
 		*)
 		print_usage
