@@ -22,7 +22,9 @@ print_usage(){
 	echo
 	echo -e "Example: "
 	echo -e "\t\thbaseutil.sh -d table_name"
+
 	echo -e "\t\thbaseutil.sh -S <starttime> -E <endtime> -P <peer.adr> -A '<additional opts>' -C <table name>" 
+	echo -e "\t\thbaseutil.sh -S <starttime> -E <endtime> -i <ID> -A '<additional opts>' -V <table name>" 
 }
 
 check_consistency(){
@@ -48,6 +50,10 @@ EOF
 
 copy_table(){
 	hbase org.apache.hadoop.hbase.mapreduce.CopyTable --starttime=$STARTTIME --endtime=$ENDTIME --peer.adr=$PEER $ADDOPTS $1
+}
+
+verify_replication(){
+HADOOP_CLASSPATH=`${HBASE_HOME}/bin/hbase classpath` hadoop jar $HBASE_HOME/lib/hbase-server.jar verifyrep --starttime=$STARTTIME --stoptime=$ENDTIME $ADDOPTS $ID $1 
 }
 
 while getopts c::e:d:f:C:S:E:F:A: opts;do
@@ -111,6 +117,30 @@ while getopts c::e:d:f:C:S:E:F:A: opts;do
 			print_msg "No table provided for copy."
 			exit
 		fi
+		;;
+		h)
+		if [[ "$OPTARG" != "" ]];then
+			HBASE_HOME=$OPTARG
+		else
+			HBASE_HOME=/usr/hdp/current/hbase
+		fi
+		;;
+		i)
+		if [[ "$OPTARG" != "" ]];then
+			ID=$OPTARG
+		else
+			print_msg "No peer_id provided."
+			exit
+		fi
+		;;
+		V)
+		if [[ "$OPTARG" != "" ]];then
+			verify_replication $OPTARG
+		else
+			print_msg "No table provided."
+			exit
+		fi
+		;;
 		;;
 		*)
 		print_usage
