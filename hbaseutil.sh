@@ -56,10 +56,10 @@ copy_table(){
 
 verify_replication(){
 print_msg "Verifying replication: $1"
-HADOOP_CLASSPATH=`${HBASE_HOME}/bin/hbase classpath` hadoop jar $HBASE_HOME/lib/hbase-server.jar verifyrep --starttime=$STARTTIME --stoptime=$ENDTIME $ADDOPTS $ID $1 
+hbase org.apache.hadoop.hbase.mapreduce.replication.VerfyReplication --starttime=$STARTTIME --stoptime=$ENDTIME $ADDOPTS $ID $1 
 }
 
-while getopts c::e:d:f:C:S:E:P:A:h:i:V: opts;do
+while getopts c::e:d:f:C:S:E:P:A:i:V: opts;do
 	case $opts in
 		c)
 		if [[ "$OPTARG" != "" ]];then
@@ -111,13 +111,6 @@ while getopts c::e:d:f:C:S:E:P:A:h:i:V: opts;do
 		else
 			print_msg "No table provided for copy."
 			exit
-		fi
-		;;
-		h)
-		if [[ "$OPTARG" != "" ]];then
-			HBASE_HOME=$OPTARG
-		else
-			HBASE_HOME=/usr/hdp/current/hbase-client/
 		fi
 		;;
 		i)
