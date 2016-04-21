@@ -117,7 +117,7 @@ while getopts c::e:d:f:C:S:E:P:A:h:i:V: opts;do
 		if [[ "$OPTARG" != "" ]];then
 			HBASE_HOME=$OPTARG
 		else
-			HBASE_HOME=/usr/hdp/current/hbase
+			HBASE_HOME=/usr/hdp/current/hbase-client/
 		fi
 		;;
 		i)
