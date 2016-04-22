@@ -56,7 +56,7 @@ copy_table(){
 
 verify_replication(){
 print_msg "Verifying replication: $1"
-hbase org.apache.hadoop.hbase.mapreduce.replication.VerfyReplication --starttime=$STARTTIME --stoptime=$ENDTIME $ADDOPTS $ID $1 
+hbase org.apache.hadoop.hbase.mapreduce.replication.VerifyReplication --starttime=$STARTTIME --stoptime=$ENDTIME $ADDOPTS $ID $1 
 }
 
 while getopts c::e:d:f:C:S:E:P:A:i:V: opts;do
