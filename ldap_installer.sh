@@ -11,10 +11,10 @@ print_usage(){
 	echo -e "\t\t\t\t-a [<admin cn>] : Admin CN.E.g. Manager"
 	echo -e "\t\t\t\t-d <domain component> : E.g. dc=example,dc=com"
 	echo -e "\t\t\t\t-P <Password> : Password for RootDN. E.g. mypassword"
-  echo -e "\t\t\tWhere action is:"
-  echo -e "\t\t\t\t-i : Install OpenLDAP Server"
-  echo -e "Example:"
-  echo -e "\t\tldap_installer.sh -a Manager -d dc=example,dc=com -P mypassword -i"
+  	echo -e "\t\t\tWhere action is:"
+  	echo -e "\t\t\t\t-i : Install OpenLDAP Server"
+  	echo -e "Example:"
+  	echo -e "\t\tldap_installer.sh -a Manager -d dc=example,dc=com -P mypassword -i"
 }
 
 install_ldap(){
