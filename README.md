@@ -56,3 +56,9 @@ To bootstrap nodes:
 	chmod +x zeppelin-installer.sh
 	./zeppelin-installer.sh
 ```
+
+#ldap_installer.sh
+```shell
+	chmod +x ldap_installer.sh
+	./ldap_installer.sh -a Manager -d dc=example,dc=com -P mypassword -i
+```
