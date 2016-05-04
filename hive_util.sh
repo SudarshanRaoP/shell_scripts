@@ -46,8 +46,8 @@ hadoop distcp $1 $2
 }
 
 while getopts t:p:s:d:iec opts; do
-    case $opts in
-    	t)
+	case $opts in
+    		t)
 		if [[ $OPTARG == "" ]];then
 			print_msg Table argument is missing.
 			print_usage
