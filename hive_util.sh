@@ -12,6 +12,8 @@ print_usage(){
 	echo -e "\t\t\t\t-p <directory path> : E.g. /tmp/hive-data"
 	echo -e "\t\t\t\t-s <source> : Source HDFS path. E.g. hdfs://srcname:8020/tmp/src/data"
 	echo -e "\t\t\t\t-d <destination> : Destination HDFS path. E.g. hdfs://destname:8020/tmp/dest/data"
+	echo -e "\t\t\t\t-P <partition specs> : E.g. \"dt='2008-08-02', country='US'\""
+	echo -e "\t\t\t\t-A <additional args> : Addition args to be used with -a (optional). E.g. \"location '/data/part01'\""
   	echo -e "\t\t\tWhere action is:"
   	echo -e "\t\t\t\t-i : Import data to Hive Table"
   	echo -e "Example:"
@@ -24,6 +26,17 @@ print_usage(){
   	echo -e "\t\t\t\t-c : Copy data"
   	echo -e "Example:"
   	echo -e "\t\thive_util.sh -s hdfs://src.cluster:8020/src/data -d hdfs://dest.cluster:8020/dest/data -c"
+  	echo
+  	echo -e "\t\t\t\t-l : List partitions"
+  	echo -e "Example:"
+  	echo -e "\t\thive_util.sh -t database.table -l"
+  	echo
+  	echo -e "\t\t\t\t-a : Add partition"
+  	echo -e "Example:"
+  	echo -e "\t\thive_util.sh -t database.table -P \"dt='2008-08-02', country='US'\" -a"
+  	echo -e "\t\t\t\t-a : Add partition with additional options"
+  	echo -e "Example:"
+  	echo -e "\t\thive_util.sh -t database.table -P \"dt='2008-08-02', country='US'\" -A \"location '/data/part01'\" -a"
 }
 
 import_data(){
@@ -45,7 +58,21 @@ print_msg Copying data from $1 to $2
 hadoop distcp $1 $2
 }
 
-while getopts t:p:s:d:iec opts; do
+list_partitions(){
+print_msg Listing partitions of table $1
+hive << EOF
+SHOW PARTITIONS $1;
+EOF
+}
+
+add_partition(){
+print_msg Adding partition to table $1
+hive <<EOF
+ALTER TABLE $1 ADD PARTITION ($2) $3;
+EOF
+}
+
+while getopts t:p:s:d:P:A:iecla opts; do
 	case $opts in
     		t)
 		if [[ $OPTARG == "" ]];then
@@ -58,7 +85,7 @@ while getopts t:p:s:d:iec opts; do
 		;;
 		p)
 		if [[ $OPTARG == "" ]];then
-			rint_msg Directory path argument is missing.
+			print_msg Directory path argument is missing.
 			print_usage
 			exit
 		else
@@ -67,7 +94,7 @@ while getopts t:p:s:d:iec opts; do
 		;;
 		s)
 		if [[ $OPTARG == "" ]];then
-			rint_msg Source argument is missing.
+			print_msg Source argument is missing.
 			print_usage
 			exit
 		else
@@ -76,11 +103,29 @@ while getopts t:p:s:d:iec opts; do
 		;;
 		d)
 		if [[ $OPTARG == "" ]];then
-			rint_msg Destination argument is missing.
+			print_msg Destination argument is missing.
 			print_usage
 			exit
 		else
 			DEST=$OPTARG
+		fi
+		;;
+		P)
+		if [[ $OPTARG == "" ]];then
+			print_msg Partition argument is missing.
+			print_usage
+			exit
+		else
+			PART=$OPTARG
+		fi
+		;;
+		A)
+		if [[ $OPTARG == "" ]];then
+			print_msg Addition argument is missing.
+			print_usage
+			exit
+		else
+			ADD=$OPTARG
 		fi
 		;;
 		i)
@@ -91,6 +136,12 @@ while getopts t:p:s:d:iec opts; do
 		;;
 		c)
 		copy_data $SRC $DEST
+		;;
+		l)
+		list_partitions $TABLE
+		;;
+		a)
+		add_partition $TABLE $PART $ADD
 		;;
 		*)
 		print_usage
