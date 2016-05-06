@@ -103,6 +103,8 @@ print_msg
 ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b cn=schema,cn=config "(objectClass=olcSchemaConfig)" dn
 
 print_msg Cleaning temporary workspace
+rm -rf /tmp/slapd.d
+print_msg Done
 }
 
 while getopts a:d:P:iA opts; do
