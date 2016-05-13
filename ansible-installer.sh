@@ -75,7 +75,12 @@ while getopts h:u::p: opts; do
     esac
 done
 
-install_deps
-install_ansible
-prepare_hosts $hostfile $remote_user $password
-test_ansible $hostfile $remote_user
+if [[ "$#" -eq 0 ]];then
+  print_msg No arguments provided.
+  exit
+  else
+  install_deps
+  install_ansible
+  prepare_hosts $hostfile $remote_user $password
+  test_ansible $hostfile $remote_user
+fi
