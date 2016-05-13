@@ -39,7 +39,7 @@ prepare_hosts(){
 test_ansible(){
   for host in `cat $1`;do
     print_msg Testing connection to $host
-    ansible $host -m raw -a "echo success"
+    ansible $host -m raw -a "echo success" -u $2
   done
 }
 
@@ -78,4 +78,4 @@ done
 install_deps
 install_ansible
 prepare_hosts $hostfile $remote_user $password
-test_ansible $hostfile
+test_ansible $hostfile $remote_user
