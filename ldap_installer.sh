@@ -15,6 +15,8 @@ print_usage(){
   	echo -e "\t\t\t\t-i : Install OpenLDAP Server"
   	echo -e "Example:"
   	echo -e "\t\tldap_installer.sh -a Manager -d dc=example,dc=com -P mypassword -i"
+  	echo -e "Example: Add additional schemas"
+  	echo -e "\t\tldap_installer.sh -A"
 }
 
 install_ldap(){
@@ -33,7 +35,7 @@ get_os_version(){
   if [[ "$VERSION" == "6" ]];then
     LDAPDB="{2}bdb,cn=config"
   elif [[ "$VERSION" == "7" ]];then
-    LDAPDB="{2}hbd,cn=config"
+    LDAPDB="{2}hdb,cn=config"
   else
     print_msg Unsupported OS version
     exit
@@ -46,7 +48,7 @@ PW=`slappasswd -s $PASSWORD`
 
 configure_ldap(){
 
-prin_msg Configuring domain
+print_msg Configuring domain
 ldapmodify -Q -Y EXTERNAL -H ldapi:/// <<EOF
 dn: olcDatabase=$LDAPDB
 changetype: modify
@@ -77,7 +79,35 @@ print_msg ldapwhoami:
 ldapwhoami -D cn=$ADMIN,$DC -w $PASSWORD
 }
 
-while getopts a:d:P:i opts; do
+add_schema(){
+print_msg Creating temporary workspace
+mkdir /tmp/slapd.d
+cat <<EOF > new_slapd.conf
+include          /etc/openldap/schema/core.schema
+include          /etc/openldap/schema/cosine.schema
+include          /etc/openldap/schema/nis.schema
+include          /etc/openldap/schema/inetorgperson.schema
+EOF
+slaptest -f new_slapd.conf -F /tmp/slapd.d
+
+cp "/tmp/slapd.d/cn=config/cn=schema/cn={1}cosine.ldif" "/etc/openldap/slapd.d/cn=config/cn=schema"
+cp "/tmp/slapd.d/cn=config/cn=schema/cn={2}nis.ldif" "/etc/openldap/slapd.d/cn=config/cn=schema"
+cp "/tmp/slapd.d/cn=config/cn=schema/cn={3}inetorgperson.ldif" "/etc/openldap/slapd.d/cn=config/cn=schema"
+
+chown ldap:ldap '/etc/openldap/slapd.d/cn=config/cn=schema/cn={1}cosine.ldif'
+chown ldap:ldap '/etc/openldap/slapd.d/cn=config/cn=schema/cn={2}nis.ldif'
+chown ldap:ldap '/etc/openldap/slapd.d/cn=config/cn=schema/cn={3}inetorgperson.ldif'
+print_msg Restarting slapd
+service slapd restart
+print_msg
+ldapsearch -LLLQY EXTERNAL -H ldapi:/// -b cn=schema,cn=config "(objectClass=olcSchemaConfig)" dn
+
+print_msg Cleaning temporary workspace
+rm -rf /tmp/slapd.d
+print_msg Done
+}
+
+while getopts a:d:P:iA opts; do
     case $opts in
         a)
         if [[ "$OPTARG" == "" ]];then
@@ -110,6 +140,9 @@ while getopts a:d:P:i opts; do
         generate_pw
         configure_ldap
         ldap_whoami
+        ;;
+        A)
+        add_schema
         ;;
         *)
         print_usage
