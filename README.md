@@ -62,3 +62,10 @@ To bootstrap nodes:
 	chmod +x ldap_installer.sh
 	./ldap_installer.sh -a Manager -d dc=example,dc=com -P mypassword -i
 ```
+
+#ansible-installer.sh
+```shell
+   chmod +x ansible-installer.sh
+   #hostfile contains hosts (newline separated) to be managed by ansible.
+   ./ansible-installer.sh -h hostfile -u root -p password
+```
