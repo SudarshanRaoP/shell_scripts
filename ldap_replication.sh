@@ -5,7 +5,7 @@ print_msg(){
 }
 
 print_usage(){
-  echo -e "Usage: "
+	echo -e "Usage: "
 	echo -e "\tldap_replication.sh [options <args>] <action>"
 	echo -e "\t\tWhere options are:"
 	echo -e "\t\t\t-i <ID> : Unique ID for LDAP Server. Must be different on different servers."
@@ -13,13 +13,13 @@ print_usage(){
 	echo -e "\t\t\t-B <search base> : E.g. dc=example,dc=com"
 	echo -e "\t\t\t-p <Provider> : Other LDAP server URL. E.g. ldap://server.example.com:389"
 	echo -e "\t\t\t-P <Password> : Password for binddn. E.g. mypassword"
-  echo -e "\t\tWhere action is:"
-  echo -e "\t\t-e : Enable replication"
-  echo -e "Example:"
-  echo -e "\tldap_replication.sh -i 0 -b cn=admin,dc=example,dc=com -p ldap://server2.example.com -P mypassword -B ou=Users,dc=example,dc=com -e"
-  echo -e "\t\t-m : Modify replication"
-  echo -e "Example:"
-  echo -e "\tldap_replication.sh -i 0 -b cn=admin,dc=example,dc=com -p ldap://server2.example.com -P password -B dc=example,dc=com -m"
+  	echo -e "\t\tWhere action is:"
+  	echo -e "\t\t-e : Enable replication"
+  	echo -e "Example:"
+  	echo -e "\tldap_replication.sh -i 0 -b cn=admin,dc=example,dc=com -p ldap://server2.example.com -P mypassword -B ou=Users,dc=example,dc=com -e"
+  	echo -e "\t\t-m : Modify replication"
+  	echo -e "Example:"
+  	echo -e "\tldap_replication.sh -i 0 -b cn=admin,dc=example,dc=com -p ldap://server2.example.com -P password -B dc=example,dc=com -m"
 }
 
 get_os_version(){
@@ -114,13 +114,13 @@ while getopts i:b:B:p:P:em opts; do
         fi
         ;;
         b)
-		if [[ "$OPTARG" == "" ]];then
-			print_msg Bind DN is missing.
-			exit
-		else
-			BINDDN=$OPTARG
-		fi
-		;;
+	if [[ "$OPTARG" == "" ]];then
+	   print_msg Bind DN is missing.
+	   exit
+	else
+	    BINDDN=$OPTARG
+	fi
+	;;
         p)
         if [[ "$OPTARG" == "" ]];then
            print_msg Provider is missing.
