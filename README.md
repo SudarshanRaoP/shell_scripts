@@ -63,6 +63,26 @@ To bootstrap nodes:
 	./ldap_installer.sh -a Manager -d dc=example,dc=com -P mypassword -i
 ```
 
+#ldap_replication.sh
+```shell
+Usage: 
+	ldap_replication.sh [options <args>] <action>
+		Where options are:
+			-i <ID> : Unique ID for LDAP Server. Must be different on different servers.
+		-b <bind dn> : DN for binding to the other server E.g. cn=admin,dc=example,dc=com.
+			-B <search base> : E.g. dc=example,dc=com
+			-p <Provider> : Other LDAP server URL. E.g. ldap://server.example.com:389
+			-P <Password> : Password for binddn. E.g. mypassword
+		Where action is:
+		-e : Enable replication
+Example:
+	ldap_replication.sh -i 0 -b cn=admin,dc=example,dc=com -p ldap://server2.example.com -P mypassword -B ou=Users,dc=example,dc=com -e
+		-m : Modify replication
+Example:
+	ldap_replication.sh -i 0 -b cn=admin,dc=example,dc=com -p ldap://server2.example.com -P password -B dc=example,dc=com -m
+```
+Note: `-i` and `-p` must be different on different servers.
+
 #ansible-installer.sh
 ```shell
    chmod +x ansible-installer.sh
