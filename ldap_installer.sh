@@ -46,9 +46,26 @@ generate_pw(){
 PW=`slappasswd -s $PASSWORD`
 }
 
-configure_ldap(){
+validate_opts(){
+	if [[ "$ADMIN" == "" ]];then
+	print_msg Admin dn is required.
+	exit
+	fi
+	if [[ "$DC" == "" ]];then
+	print_msg Domain Component (DC) is required.
+	exit
+	fi
+	if [[ "$PASSWORD" == "" ]];then
+	print_msg Password is required.
+	exit
+	fi
+}
 
+configure_ldap(){
 print_msg Configuring domain
+#Validate options
+validate_opts
+
 ldapmodify -Q -Y EXTERNAL -H ldapi:/// <<EOF
 dn: olcDatabase=$LDAPDB
 changetype: modify
