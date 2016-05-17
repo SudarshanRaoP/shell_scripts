@@ -35,6 +35,29 @@ get_os_version(){
   fi
 }
 
+validate_opts(){
+	if [[ "$ID" == "" ]];then
+	print_msg ID is required.
+	exit
+	fi
+	if [[ "$BINDDN" == "" ]];then
+	print_msg BINDDN is required.
+	exit
+	fi
+	if [[ "$BASE" == "" ]];then
+	print_msg Search base is required.
+	exit
+	fi
+	if [[ "$PASSWORD" == "" ]];then
+	print_msg Password is required.
+	exit
+	fi
+	if [[ "$PROVIDER" == "" ]];then
+	print_msg Provider is required.
+	exit
+	fi
+	
+}
 add_syncprov(){
 #Add syncprov module
 ldapadd -Y EXTERNAL -H ldapi:/// <<EOF
@@ -55,6 +78,9 @@ EOF
 }
 
 configure_replication(){
+print_msg Configuring Replication ...
+#Validate that all the options are provided.
+validate_opts
 # olcServerID must be different on different servers
 ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
 dn: cn=config
@@ -83,6 +109,9 @@ EOF
 }
 
 modify_replication(){
+print_msg Modifying Replication Configuration ...
+#Validate that all the options are provided.
+validate_opts
 # olcServerID must be different on different servers
 ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
 dn: cn=config
@@ -162,3 +191,4 @@ while getopts i:b:B:p:P:em opts; do
         ;;
     esac
 done
+#End of script
